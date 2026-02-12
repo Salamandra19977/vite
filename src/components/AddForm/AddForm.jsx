@@ -1,6 +1,7 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useRef, useContext} from 'react'
 import PropTypes from 'prop-types'
 import style from './AddForm.module.scss'
+import {ContextStore} from "../../store/ContextStore"
 
 function AddForm(props) {
   const [title, setTitle] = useState("")
@@ -9,6 +10,16 @@ function AddForm(props) {
 
   const titleRef = useRef(null)
   const dateRef = useRef(null)
+
+  let {addEvent} = useContext(ContextStore)
+
+  const hadleSubmit = (e) => {
+    e.preventDefault()
+    if (correct) {
+        addEvent({title, date})
+        props.open(false)
+    }
+  }
 
   useEffect(() => {
     titleRef.current.style.display = "none"
@@ -41,7 +52,12 @@ function AddForm(props) {
                     onChange={(e) => setDate(e.target.value)}
                 />
                 <span className={style.error} ref={dateRef}>Date is empty</span>
-                <button className={style.button} disabled={!correct}>Add</button>
+                <button 
+                    className={style.button} disabled={!correct}
+                    onClick={hadleSubmit}
+                >
+                    Add
+                </button>
                 <button 
                     className={style.closeButton}
                     onClick={() => props.open(false)}
