@@ -4,6 +4,8 @@ import style from "./Main.module.scss"
 import AddForm from "../AddForm/AddForm"
 import {FaRegPlusSquare} from "react-icons/fa"
 import MCalendar from '../MCalendar/MCalendar'
+import DCalendar from '../DCalendar/DCalendar'
+import WCalendar from '../WCalendar/WCalendar'
 import {Routes, Route} from "react-router"
 
 function Main(props) {
@@ -12,8 +14,8 @@ function Main(props) {
     <div className={style.wrapper}>
         <Routes>
           <Route path='/' element={<MCalendar/>}/>
-          <Route path='/week' element={<div>week</div>}/>
-          <Route path='/day' element={<div>day</div>}/>
+          <Route path='/week' element={<WCalendar/>}/>
+          <Route path='/day' element={<DCalendar/>}/>
         </Routes>
         {modalOpen && <AddForm open={setModalOpen}/>}
         <button 
