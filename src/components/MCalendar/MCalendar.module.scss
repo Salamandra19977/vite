@@ -1,0 +1,40 @@
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+
+    & th, 
+    td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    & th {
+        background-color: #2557df;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    & td {
+        position: relative;
+        padding: 2rem 0.5rem;
+
+        & .number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        & .event {
+            width: 100%;
+            margin-top: 5px;
+            overflow: hidden;
+            border: none;
+            border-left: 5px solid #2557df;
+            padding: 0.3rem;
+        }
+    }
+}

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import style from "./MCalendar.module.scss"
+import {ContextStore} from "../../store/ContextStore"
 
 function MCalendar(props) {
   const getCalendarDates = (year, month) => {
@@ -21,8 +22,8 @@ function MCalendar(props) {
     return dates
   }
 
+  let {events} = useContext(ContextStore)
   const [currentDate, setCurrentDate] = useState(new Date())
-
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
   const dates = getCalendarDates(year, month)
@@ -32,15 +33,41 @@ function MCalendar(props) {
         <div className={style.container}>
             <table>
                 <thead>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                    <th>Sunday</th>
+                    <tr>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    {Array.from({length: Math.ceil(dates.length / 7)}, (_, weekIndex) => (
+                        <tr key={weekIndex}>
+                            {dates
+                                .slice(weekIndex * 7, weekIndex * 7 + 7)
+                                .map((date, index) => (
+                                    <td key={index}>
+                                        <span className={style.number}>
+                                            {date.getUTCDate()}
+                                        </span>
+                                        {events
+                                            .filter((event) => event.date == date.toISOString().split("T")[0])
+                                            .map((event, i) => (
+                                                <button 
+                                                    key={i}
+                                                    className={style.event}
+                                                >
+                                                    {event.title}
+                                                </button>
+                                        ))}
+                                    </td>
+                                ))}
+                        </tr>
+                    ))}
+                </tbody>
             </table>
         </div>
     </div>

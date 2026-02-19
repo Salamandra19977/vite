@@ -7,12 +7,25 @@
     background-color: #2557df;
     color: #fff;
 
+    .logoBar {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 500;
+
+        & .icon {
+            margin-right: 2px;
+        }
+    }
+
     .navBar {
         display: flex;
         align-items: center;
         gap: 1rem;
 
-        .link {
+        .link,  .active {
             text-decoration: none;
             color: #fff;
             font-size: 1.2rem;
@@ -20,6 +33,10 @@
             display: flex;
             align-items: center;
             gap: 0.2rem;
+        }
+
+        .active {
+            border-bottom: 2px solid #fff;
         }
     }
 }

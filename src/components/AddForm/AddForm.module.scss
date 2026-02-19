@@ -1,4 +1,11 @@
 .wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    min-height: 500px;
+    min-width: 500px;
     & .closeButton {
         position: absolute;
         top: 1rem;
