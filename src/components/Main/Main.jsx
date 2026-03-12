@@ -8,6 +8,7 @@ import DCalendar from '../DCalendar/DCalendar'
 import WCalendar from '../WCalendar/WCalendar'
 import {Routes, Route} from "react-router"
 import RegisterPage from '../Auth/RegisterPage'
+import LoginPage from '../Auth/LoginPage'
 
 function Main(props) {
   const [modalOpen, setModalOpen] = React.useState(false)
@@ -18,6 +19,7 @@ function Main(props) {
           <Route path='/week' element={<WCalendar/>}/>
           <Route path='/day' element={<DCalendar/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
+          <Route path='/login' element={<LoginPage/>}/>
         </Routes>
         {modalOpen && <AddForm open={setModalOpen}/>}
         <button 

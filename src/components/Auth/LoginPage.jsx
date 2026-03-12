@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import style from './Auth.module.scss'
 import { useForm } from 'react-hook-form'
 
-function RegisterPage(props) {
+function LoginPage(props) {
     const {
         register,
         handleSubmit,
@@ -12,7 +12,7 @@ function RegisterPage(props) {
     } = useForm()
     return (
         <div className={style.wrapper}>
-            <h1>Register</h1>
+            <h1>Login</h1>
             <form onSubmit={handleSubmit((data) => console.log(data))}>
                 <label htmlFor="login">Login</label>
                 <input 
@@ -36,20 +36,6 @@ function RegisterPage(props) {
                 />
                 <span>{errors.login?.message}</span>
                 <br />
-                <label htmlFor="email">Email</label>
-                <input 
-                    type="email" 
-                    id='email'
-                    {...register("email", {
-                        required: true,
-                        pattern: {
-                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                            message: "Invalid email format"
-                        }
-                    })}  
-                />
-                <span>{errors.email?.message}</span>
-                <br />
                 <label htmlFor="password">Password</label>
                 <input 
                     type="password" 
@@ -72,27 +58,12 @@ function RegisterPage(props) {
                 />
                 <span>{errors.password?.message}</span>
                 <br />
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input 
-                    type="password" 
-                    id='confirmPassword'
-                    {...register("confirmPassword", {
-                        required: true,
-                        validate: (value) => {
-                            if (value !== watch("password")) {
-                                return "Passwords do not match"
-                            }
-                        }
-                    })}  
-                />
-                <span>{errors.confirmPassword?.message}</span>
-                <br />
-                <button className={style.button}>Register</button>
+                <button className={style.button}>Login</button>
             </form>
         </div>
     )
 }
 
-RegisterPage.propTypes = {}
+LoginPage.propTypes = {}
 
-export default RegisterPage
+export default LoginPage
