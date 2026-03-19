@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import style from "./WCalendar.module.scss";
 import { ContextStore } from "../../store/ContextStore";
 
+import { useSelector } from 'react-redux'
+
 function WCalendar(props) {
-    let { events } = useContext(ContextStore);
+      let events = useSelector((state) => state.calendars.events)
     const [currentDate, setCurrentDate] = useState(new Date());
 
 const getMinutes = (time) => {

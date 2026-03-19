@@ -5,7 +5,21 @@ import { BsCalendar3, BsCalendar4Week } from "react-icons/bs"
 import { IoTodayOutline } from "react-icons/io5"
 import { NavLink } from 'react-router'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from "react-router"
+import { removeToken } from "../Auth/AuthReducer";
+
+
 function Header(props) {
+    let isAuthenticated = useSelector((state) => state.auth.token !== null)
+    const dispatch = useDispatch()
+    let navigate = useNavigate()
+
+    let logout = () => {
+        dispatch(removeToken())
+        navigate("/login")
+    }
+
     return (
         <header className={style.wrapper}>
             <NavLink to="/" className={style.logoBar}>

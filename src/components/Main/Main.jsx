@@ -9,9 +9,14 @@ import WCalendar from '../WCalendar/WCalendar'
 import {Routes, Route} from "react-router"
 import RegisterPage from '../Auth/RegisterPage'
 import LoginPage from '../Auth/LoginPage'
+import { useDispatch, useSelector } from 'react-redux'
+import { openModal } from '../CalendarReducer'
 
 function Main(props) {
-  const [modalOpen, setModalOpen] = React.useState(false)
+  const modalState = useSelector((state) => state.calendars.modalState)
+  const dispatch = useDispatch()
+  let isAuthenticated = useSelector((state) => state.auth.token !== null)
+
   return (
     <div className={style.wrapper}>
         <Routes>
@@ -21,10 +26,10 @@ function Main(props) {
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
         </Routes>
-        {modalOpen && <AddForm open={setModalOpen}/>}
+        {modalState && <AddForm/>}
         <button 
           className={style.addButton}
-          onClick={() => setModalOpen(true)}
+          onClick={() => dispatch(openModal())}
         >
           <FaRegPlusSquare/>
         </button>
