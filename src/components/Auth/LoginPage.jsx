@@ -1,19 +1,41 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import style from './Auth.module.scss'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser, clearError } from './AuthReducer'
+import { useNavigate } from 'react-router'
+
 
 function LoginPage(props) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { loading, error, token } = useSelector((state) => state.auth)
+
+    useEffect(() => {
+        if (error) {
+            alert(error)
+            dispatch(clearError)
+        }
+        if (token) {
+            navigate("/")
+        }
+    }, [error, token])
+
     const {
         register,
         handleSubmit,
         formState: { errors },
         watch
     } = useForm()
+
+    let onSubmit = (data) => {
+        dispatch(loginUser(data))
+    }
     return (
         <div className={style.wrapper}>
             <h1>Login</h1>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="login">Login</label>
                 <input 
                     type="text" 

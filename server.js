@@ -8,6 +8,13 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); 
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); 
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); 
+    next();
+})
+
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -95,6 +102,22 @@ const authenticateToken = (req, res, next) => {
 
 app.get("/protected", authenticateToken, (req, res) => {
     res.send({message: `Hello, user ${req.user.id}`})
+})
+
+app.post("/add", authenticateToken, async (req, res) => {
+    const data = req.body
+    data.user_id = req.user.id
+    await pool.query("INSERT INTO Events SET ?", data)
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id])
+    res.send(result[0])
+})
+
+app.post("/events", authenticateToken, async (req, res) => {
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id])
+    if (result[0].length === 0) {
+        return res.status(404).send({ error: "No events found."})
+    }
+    res.send(result[0])
 })
 
 const PORT = 3000

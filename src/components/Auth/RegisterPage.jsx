@@ -1,22 +1,40 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import style from './Auth.module.scss'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser, clearError } from './AuthReducer'
+import { useNavigate } from 'react-router'
 
 function RegisterPage(props) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { loading, error, token } = useSelector((state) => state.auth)
+    useEffect(() => {
+        if (error) {
+            alert(error)
+            dispatch(clearError)
+        }
+        if (token) {
+            navigate("/")
+        }
+    }, [error, token])
     const {
         register,
         handleSubmit,
         formState: { errors },
         watch
     } = useForm()
+    let onSubmit = (data) => {
+        dispatch(registerUser(data))
+    }
     return (
         <div className={style.wrapper}>
             <h1>Register</h1>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="login">Login</label>
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     id='login'
                     {...register("login", {
                         required: true,
@@ -32,13 +50,13 @@ function RegisterPage(props) {
                             value: /^[a-zA-Z0-9]+$/,
                             message: "Login must be only letters and numbers"
                         }
-                    })} 
+                    })}
                 />
                 <span>{errors.login?.message}</span>
                 <br />
                 <label htmlFor="email">Email</label>
-                <input 
-                    type="email" 
+                <input
+                    type="email"
                     id='email'
                     {...register("email", {
                         required: true,
@@ -46,13 +64,13 @@ function RegisterPage(props) {
                             value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                             message: "Invalid email format"
                         }
-                    })}  
+                    })}
                 />
                 <span>{errors.email?.message}</span>
                 <br />
                 <label htmlFor="password">Password</label>
-                <input 
-                    type="password" 
+                <input
+                    type="password"
                     id='password'
                     {...register("password", {
                         required: true,
@@ -68,13 +86,13 @@ function RegisterPage(props) {
                             value: /^[a-zA-Z0-9]+$/,
                             message: "Password must be only letters and numbers"
                         }
-                    })}  
+                    })}
                 />
                 <span>{errors.password?.message}</span>
                 <br />
                 <label htmlFor="confirmPassword">Confirm Password</label>
-                <input 
-                    type="password" 
+                <input
+                    type="password"
                     id='confirmPassword'
                     {...register("confirmPassword", {
                         required: true,
@@ -83,7 +101,7 @@ function RegisterPage(props) {
                                 return "Passwords do not match"
                             }
                         }
-                    })}  
+                    })}
                 />
                 <span>{errors.confirmPassword?.message}</span>
                 <br />

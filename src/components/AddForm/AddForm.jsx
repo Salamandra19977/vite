@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import style from './AddForm.module.scss'
 import { ContextStore } from "../../store/ContextStore"
 import { useDispatch } from 'react-redux'
-import { addEvent, closeModal } from '../CalendarReducer'
+import { addNewEvent, closeModal } from '../CalendarReducer'
 
 function AddForm(props) {
     const [title, setTitle] = useState("")
@@ -21,7 +21,7 @@ function AddForm(props) {
     const hadleSubmit = (e) => {
         e.preventDefault()
         if (correct) {
-            dispatch(addEvent({ title, date }))
+            dispatch(addNewEvent({ title, date }))
             dispatch(closeModal())
         }
     }
