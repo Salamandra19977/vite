@@ -62,7 +62,7 @@ export const loginUser = createAsyncThunk(
 	"auth/loginUser",
 	async (data, { rejectWithValue }) => {
 		try {
-			const response = await fetch("http://localhost:3000/login", {
+			const response = await fetch("/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -84,7 +84,7 @@ export const registerUser = createAsyncThunk(
 	"auth/registerUser",
 	async (data, { rejectWithValue, dispatch }) => {
 		try {
-			const response = await fetch("http://localhost:3000/register", {
+			const response = await fetch("/register", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -105,7 +105,7 @@ export const registerUser = createAsyncThunk(
 
 export const {
 	uploadTokenFromLocalStorege,
-	setToken,
+	// setToken,
 	removeToken,
 	clearError
 } = AuthReducer.actions

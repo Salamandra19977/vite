@@ -36,27 +36,19 @@ function LoginPage(props) {
         <div className={style.wrapper}>
             <h1>Login</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label htmlFor="login">Login</label>
+                <label htmlFor="email">Email</label>
                 <input 
-                    type="text" 
-                    id='login'
-                    {...register("login", {
+                    type="email" 
+                    id='email'
+                    {...register("email", {
                         required: true,
-                        minLength: {
-                            value: 3,
-                            message: "Login must be at least 3 characters"
-                        },
-                        maxLength: {
-                            value: 20,
-                            message: "Login must be at most 20 characters"
-                        },
                         pattern: {
-                            value: /^[a-zA-Z0-9]+$/,
-                            message: "Login must be only letters and numbers"
+                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                            message: "Invalid email format"
                         }
                     })} 
                 />
-                <span>{errors.login?.message}</span>
+                <span>{errors.email?.message}</span>
                 <br />
                 <label htmlFor="password">Password</label>
                 <input 

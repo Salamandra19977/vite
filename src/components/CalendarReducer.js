@@ -4,13 +4,26 @@ const initialState = {
     events: [],
     modalState: false,
     loading: false,
-	error: null
+	error: null,
+    month: new Date().getTime(),
+    week: new Date().getTime(),
+    day: new Date().getTime(),
+
 }
 
 const CalendarReducer = createSlice({
   name: "Calendars",
   initialState,
   reducers: {
+    changeMonth: (state, action) => {
+        state.month = new Date(action.payload).getTime()
+    },
+    changeWeek: (state, action) => {
+        state.week = new Date(action.payload).getTime()
+    },
+    changeDay: (state, action) => {
+        state.day = new Date(action.payload).getTime()
+    },
     addEvent: (state, action) => {
         state.events = [...state.events, action.payload]
     },
@@ -54,6 +67,21 @@ const CalendarReducer = createSlice({
             state.loading = false
             state.error = action.payload?.error || action.error.message
         })
+
+        builder.addCase(removeEvent.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+  
+        builder.addCase(removeEvent.fulfilled, (state, action) => {
+            state.loading = false
+            state.events = action.payload
+        })
+  
+        builder.addCase(removeEvent.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload?.error || action.error.message
+        })
     },
 });
 
@@ -61,7 +89,7 @@ export const addNewEvent = createAsyncThunk(
 	"calendars/addNewEvent",
 	async (data, { rejectWithValue, getState }) => {
 		try {
-			const response = await fetch("http://localhost:3000/add", {
+			const response = await fetch("/add", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -84,7 +112,7 @@ export const getEvents = createAsyncThunk(
 	"calendars/getEvents",
 	async (data, { rejectWithValue, getState }) => {
 		try {
-			const response = await fetch("http://localhost:3000/events", {
+			const response = await fetch("/events", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -102,7 +130,32 @@ export const getEvents = createAsyncThunk(
 	}
 )
 
+export const removeEvent = createAsyncThunk(
+	"calendars/removeEvent",
+	async (id, { rejectWithValue, getState }) => {
+		try {
+			const response = await fetch(`/remove/${id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+                    Authorization: `Bearer ${getState().auth.token}`
+				},
+			})
+			let result = await response.json()
+			if (!response.ok) {
+				return rejectWithValue({ error: result.error })
+			}
+			return result
+		} catch (error) {
+			throw error
+		}
+	}
+)
+
 export const {
+    changeDay,
+    changeMonth,
+    changeWeek,
     addEvent,
     openModal,
     closeModal,

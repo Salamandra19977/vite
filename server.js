@@ -7,6 +7,7 @@ dotenv.config()
 
 const app = express()
 app.use(express.json())
+app.use(express.static("dist"))
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); 
@@ -25,7 +26,7 @@ const pool = mysql.createPool({
 })
 
 app.get("/", (req, res) => {
-    res.end("Work server!")
+    res.sendFile("index.html")
 })
 
 app.post("/login", async (req, res) => {
@@ -117,6 +118,12 @@ app.post("/events", authenticateToken, async (req, res) => {
     if (result[0].length === 0) {
         return res.status(404).send({ error: "No events found."})
     }
+    res.send(result[0])
+})
+
+app.delete("/remove/:id", authenticateToken, async (req, res) => {
+    await pool.query("DELETE FROM Events WHERE id = ?", [req.params.id])
+    let result = await pool.query("SELECT * FROM Events WHERE user_id = ?", [req.user.id])
     res.send(result[0])
 })
 
